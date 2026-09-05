@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "razor"
+version = "0.1.0"
+description = "A closed-loop red team / blue team system for GenAI-era payment fraud"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security",
+    "Intended Audience :: Financial and Insurance Industry",
+]
+
+[project.urls]
+Repository = "https://github.com/dhairyahuh/Razor"
+
+
+# Kept in step with requirements.txt, which carries the reasoning behind the pins.
+dependencies = [
+    "numpy==2.0.2",
+    "pandas==2.3.3",
+    "scipy==1.13.1",
+    "scikit-learn==1.6.1",
+    "networkx==3.2.1",
+    "pyarrow==21.0.0",
+    "PyYAML==6.0.3",
+    "cryptography==43.0.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==8.4.2", "httpx==0.28.1"]
+# The HTTP surface is an extra, not a dependency. The offline pipeline is the substance of
+# this repository and it must remain installable and runnable without a web framework.
+serve = ["fastapi==0.128.8", "uvicorn[standard]==0.39.0", "pydantic==2.13.4"]
+
+[project.scripts]
+redteam = "redteam.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+redteam = ["identify/attack_library.yaml"]

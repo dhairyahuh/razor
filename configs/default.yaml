@@ -1,0 +1,79 @@
+# Default configuration for the payment fraud red-team pipeline.
+# Every stage of the pipeline is fully determined by this file plus `seed`.
+seed: 20260909
+run_name: default_run
+data_dir: data
+artifacts_dir: artifacts
+
+population:
+  n_customers: 5000
+  n_merchants: 900
+  n_psps: 14
+  age_bands:
+    "18-24": 0.16
+    "25-34": 0.28
+    "35-49": 0.27
+    "50-64": 0.18
+    "65+": 0.11
+  corporate_share: 0.04
+
+benign:
+  start_date: "2026-05-01"
+  n_days: 45
+  base_txns_per_customer_per_day: 1.25
+  rail_mix:
+    UPI_P2M: 0.44
+    UPI_P2P: 0.21
+    CARD_CNP: 0.13
+    CARD_CP: 0.07
+    IMPS: 0.05
+    NEFT: 0.03
+    RTP_FEDNOW: 0.03
+    SEPA_INST: 0.02
+    WALLET: 0.02
+  # Legitimate-but-weird payments (travel, new phone, big-ticket, first-time payee).
+  # These exist purely to punish a defence that over-fits on shallow signals.
+  hard_negative_rate: 0.055
+
+attacks:
+  target_fraud_rate: 0.0075
+  # Signature reliability. Lower = stealthier attacker, harder detection problem.
+  signal_emission: 0.72
+  evasion_share: 0.18
+  # The attack mix defaults to `default_weight` in identify/attack_library.yaml so the
+  # taxonomy stays the single source of truth. Uncomment to focus a run on a subset,
+  # e.g. an agentic-commerce-only stress test:
+  # mix:
+  #   AGENTIC-PROMPT-INJECTION-PAYEE: 0.4
+  #   AGENTIC-COUNTERFEIT-STOREFRONT: 0.3
+  #   AGENTIC-SPT-REPLAY: 0.3
+  mix: {}
+
+defence:
+  # Temporal holdout. Fraud is campaign-structured, so a random split would put half a
+  # mule ring in training and half in test and the resulting AUC would mean nothing.
+  test_days: 12
+  calibration_days: 6
+  max_iter: 400
+  forest_n_estimators: 300
+  # The operating point is a false-positive budget, not an F1 optimum: an alert queue is a
+  # fixed resource and "maximise F1" is not an instruction a fraud-ops team can act on.
+  target_fpr: 0.005
+  zero_day_vectors: 10
+
+loop:
+  # Twelve rounds, not four. Four points of a stochastic search is not a curve, and the
+  # convergence verdict, the transfer matrix and the ROI trend all need a run long enough to
+  # have a shape. Affordable because the candidate search rebuilds only the neighbourhood a
+  # mutation touched, and because the attacker's surrogate screens most candidates out
+  # before they reach the real pipeline.
+  rounds: 12
+  population: 12
+  screen_multiplier: 4
+  oracle_probe_budget: 4000
+  survivors: 4
+  mutation_scale: 0.35
+  novelty_bonus: 0.25
+  # Vectors smaller than this are skipped: fitness would move in steps too coarse to
+  # search on.
+  min_fraud_rows: 15

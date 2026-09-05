@@ -1,0 +1,55 @@
+# `docker compose up` brings up the API and the console and prints a URL.
+#
+# Three services against two images. `ui` is the console; `api` serves the deployed model and
+# the run's artefacts; `pipeline` is a one-shot that produces a new run and exits.
+#
+# The artefact directories are bind-mounted from the repository rather than held in named
+# volumes. That is a change of intent from an API-only deployment: the committed
+# `artifacts/default_run/` *is* the evidence this application rests on, and a reviewer who runs
+# `docker compose up` has to see those numbers rather than an empty volume they then have to
+# populate with a twenty-five-minute run. A run launched from the CLI or from `POST /simulate`
+# writes into the same directories, so the API still serves whichever ran last.
+
+services:
+  ui:
+    build:
+      context: ./frontend
+      args:
+        # The API is up in this stack, so the console probes for it and runs live. The
+        # standalone image defaults to demo, where there is nothing to probe.
+        VITE_MODE: live
+    image: razor-console:latest
+    ports:
+      - "127.0.0.1:5173:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build: .
+    image: razor:latest
+    # Loopback only. The API is unauthenticated by design - it is a research surface, and
+    # 8000:8000 would publish a free scoring oracle to every host on the network.
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Read-only. The API reads runs; only the pipeline writes them, and a serving process
+      # that cannot overwrite its own evidence is one fewer way to lose it mid-demo.
+      - ./artifacts:/app/artifacts:ro
+      - ./data:/app/data:ro
+    restart: unless-stopped
+    # A bounded container catches a runaway feature build during a /simulate job as a clean
+    # OOM kill rather than as a wedged host.
+    mem_limit: 6g
+
+  # Run explicitly: `docker compose run --rm pipeline`. Under a profile so that
+  # `docker compose up` starts only the API and the console and does not silently begin a
+  # multi-minute run.
+  pipeline:
+    build: .
+    image: razor:latest
+    profiles: ["run"]
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+    command: ["python", "-m", "redteam", "run", "--quick"]

@@ -1,0 +1,34 @@
+.venv/
+.venv-*/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# macOS resource forks, which arrive whenever the tree has been zipped on a Mac.
+__MACOSX/
+._*
+
+# Node dependencies anywhere in the tree (the console, and the walkthrough generator).
+node_modules/
+
+# Microsoft Office lock files, created while a document is open.
+~$*
+
+# Generated datasets and run outputs. Regenerable from a config plus a seed, so committing
+# them would be committing derived state.
+data/
+artifacts/
+
+# One exception: the demo run's tables and report. Every number quoted in the README comes
+# from these, and a reader who does not want to spend three minutes running the pipeline
+# should still be able to check them. Small - tens of kilobytes of CSV and markdown.
+!artifacts/demo/
+!artifacts/demo/**
+
+# But not the scored test set (ten thousand rows of derived output) and not the serving
+# bundle (twenty megabytes of pickled estimators). Both are outputs of the run, and the
+# tables above already say everything they support.
+artifacts/demo/defend_scored_test_set.csv
+artifacts/serving/

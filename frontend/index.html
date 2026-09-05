@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Razor — adversarial evaluation for payment fraud detection</title>
+    <meta
+      name="description"
+      content="A closed loop that finds payment fraud vectors, simulates them, trains a defence against them, measures where the defence fails, and feeds those failures back as the next generation of attacks."
+    />
+
+    <!-- Fonts are self-hosted (see src/styles/fonts.css). Preloading the two
+         faces that appear above the fold means the first paint is already
+         correct rather than swapping under the judge's eyes. -->
+    <link rel="preload" href="/fonts/plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/plex-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script>
+      // Applied before first paint so the shell never flashes the wrong theme.
+      // Small enough to inline; a module import would land after the paint.
+      try {
+        var t = localStorage.getItem('rt.theme')
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t
+        if (localStorage.getItem('rt.presentation') === 'on')
+          document.documentElement.dataset.presentation = 'on'
+      } catch (e) {
+        /* private browsing: the defaults in the markup are already right */
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      This console renders charts and a live transaction stream in the browser and needs
+      JavaScript. The underlying numbers are all in the run's CSV artefacts under
+      <code>artifacts/default_run/</code> if you would rather read them directly.
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

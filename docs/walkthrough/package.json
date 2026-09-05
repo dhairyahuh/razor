@@ -1,0 +1,13 @@
+{
+  "name": "solution-walkthrough",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Generates docs/Solution-Walkthrough.docx from the run's own artefacts",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}

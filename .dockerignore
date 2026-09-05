@@ -1,0 +1,23 @@
+# The build context is source, configs and two requirements files. Everything else is either
+# generated (and would be stale inside the image) or large enough to make the build slow for
+# no benefit.
+.git
+.venv
+venv
+__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.DS_Store
+
+# Generated. The container mounts volumes for these; baking a run into the image would ship
+# a bundle whose provenance says it came from someone else's laptop.
+artifacts/
+data/
+
+# Not needed to run the service.
+tests/
+docs/
+*.md
+!README.md

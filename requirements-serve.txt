@@ -1,0 +1,11 @@
+# The HTTP surface only. Layered on top of requirements.txt rather than merged into it,
+# because the offline pipeline is the substance of this repository and it has to stay
+# installable and runnable on a machine with no web framework on it.
+-r requirements.txt
+
+fastapi==0.128.8
+uvicorn[standard]==0.39.0
+pydantic==2.13.4
+
+# Test client for the API suite. httpx is what starlette's TestClient drives.
+httpx==0.28.1

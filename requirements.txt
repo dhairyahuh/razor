@@ -1,0 +1,25 @@
+# Core numerical / data stack. Pinned to the versions the pipeline is validated against.
+# Everything here is pure-Python or has manylinux/macos wheels: no compiler or GPU required.
+#
+# Note for macOS/arm64: the wheels here link against Apple's Accelerate framework, which on
+# recent macOS raises spurious floating-point flags and can fault inside the LAPACK-backed
+# linear solvers on wide sparse matrices. The prompt-injection guard therefore uses a
+# Cython-only sparse learner (SGD) rather than an lbfgs/liblinear logistic regression. On
+# Linux/OpenBLAS both work; the choice costs nothing and removes a platform trap.
+numpy==2.0.2
+pandas==2.3.3
+scipy==1.13.1
+scikit-learn==1.6.1
+networkx==3.2.1
+pyarrow==21.0.0
+PyYAML==6.0.3
+
+# Ed25519 for the intent and agent-identity controls. Real signatures rather than a hash
+# stand-in, because the claim those controls make - that a settlement request can be tied to
+# an instruction the customer actually gave - is only worth making if the primitive is real.
+cryptography==43.0.3
+
+pytest==8.4.2
+
+# The HTTP surface (src/redteam/serve). Optional: `python -m redteam run` needs none of it.
+# Install with `pip install -r requirements-serve.txt` to bring up the API.

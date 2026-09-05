@@ -1,0 +1,31 @@
+# Normalise line endings in the repository to LF, whatever the checkout platform.
+#
+# This tree has been developed on macOS and Windows. Without this, a Windows checkout
+# rewrites every file to CRLF and the next commit from a Mac shows the whole repository as
+# modified - which buries a real diff in noise and makes `git blame` useless.
+* text=auto eol=lf
+
+# Shell scripts and Makefiles must be LF or they will not execute in the container.
+*.sh    text eol=lf
+Makefile text eol=lf
+Dockerfile text eol=lf
+
+# Binary, so Git must not attempt any conversion. Anything zip-based belongs here:
+# `text=auto` guesses from a content sample, and a compressed container that happens to
+# look textish gets its CRLFs rewritten, which silently corrupts the file.
+*.png    binary
+*.jpg    binary
+*.svg    text eol=lf
+*.woff2  binary
+*.woff   binary
+*.ttf    binary
+*.parquet binary
+*.pkl    binary
+*.sqlite binary
+*.sqlite-shm binary
+*.sqlite-wal binary
+*.docx   binary
+*.xlsx   binary
+*.pptx   binary
+*.pdf    binary
+*.zip    binary

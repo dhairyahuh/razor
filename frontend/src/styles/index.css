@@ -1,0 +1,115 @@
+@import './fonts.css';
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background: var(--bg-ground);
+    /* The console is a fixed-height application shell, not a document. Scroll
+       belongs to the panels that own data, not to the page. */
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-ground text-fg font-sans text-base antialiased;
+    margin: 0;
+    /* Below 1024px the brief asks for a courteous notice rather than a broken
+       layout, so the shell never tries to reflow into a phone. */
+    min-width: 320px;
+  }
+
+  /* Every digit in this interface aligns. A column of amounts that jitters as
+     it ticks is unreadable, and this console ticks constantly. */
+  .tnum,
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-semibold tracking-tight;
+    margin: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Scrollbars sized for a dense tool: present enough to grab, quiet enough to
+     ignore. */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 6px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background-color: var(--border-strong); background-clip: content-box; }
+  ::-webkit-scrollbar-corner { background: transparent; }
+
+  * { scrollbar-color: var(--border) transparent; scrollbar-width: thin; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* The tour's step timer. Defined here rather than in the Tailwind config
+     because its duration is per-step and comes from the script, so it has to be
+     set inline - and an inline `animation` shorthand needs a real keyframe name
+     that Tailwind is not going to generate. */
+  @keyframes tour-progress {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+}
+
+@layer components {
+  /* The small uppercase label that titles panels and table columns. Used often
+     enough that repeating six utilities at each site would be worse. */
+  .label {
+    @apply font-display text-2xs font-semibold uppercase text-fg-muted;
+    letter-spacing: 0.075em;
+  }
+
+  /* A number the reader is meant to compare against other numbers. */
+  .num {
+    @apply font-mono tabular-nums;
+  }
+
+  /* Recharts renders its own axis text; these keep it inside the token system
+     rather than its default grey. */
+  .recharts-cartesian-axis-tick text,
+  .recharts-polar-angle-axis-tick text,
+  .recharts-label {
+    fill: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+  }
+
+  .recharts-cartesian-grid line {
+    stroke: var(--grid);
+  }
+
+  .recharts-cartesian-axis-line,
+  .recharts-cartesian-axis-tick-line {
+    stroke: var(--border);
+  }
+
+  /* Recharts draws a translucent grey rectangle on hover that fights the row
+     highlight; ours is a token. */
+  .recharts-tooltip-cursor {
+    fill: var(--accent-wash);
+  }
+}

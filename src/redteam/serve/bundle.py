@@ -1,0 +1,139 @@
+"""A servable artefact: the detector, its guards, and the identity of the run that built it.
+
+Why the bundle is one object rather than a directory of pickles
+---------------------------------------------------------------
+A fraud score is meaningless without the things that produced it. The threshold was
+calibrated on one specific calibration window; the injection guard was fitted on bundles from
+one specific training window; the feature matrix expects one specific column order. Save
+those separately and they drift apart, and the failure is silent - the service returns
+numbers that look fine and are computed against a threshold from a different model.
+
+So the bundle is atomic. One file, written once, carrying every fitted object and the
+provenance stamp of the run that produced them. A service that loads it can state exactly
+which run it is serving, and two services can be compared by run id rather than by hope.
+
+What is deliberately not in here
+--------------------------------
+No training data. The bundle carries the *fitted* legitimate-population statistics the
+reason-code generator needs, and nothing else, because a servable artefact containing
+customer transactions is a data-protection incident waiting for a deployment mistake.
+"""
+
+from __future__ import annotations
+
+import pickle
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import pandas as pd
+
+from ..provenance import Provenance
+
+#: Bumped when the pickled shape changes. A service that loads an older bundle should refuse
+#: rather than unpickle into a class whose attributes have moved, because the resulting
+#: `AttributeError` surfaces at the first request rather than at load.
+BUNDLE_VERSION = 1
+
+
+@dataclass
+class ServingBundle:
+    """Everything needed to score one transaction, plus the identity of its origin."""
+
+    detector: Any
+    provenance: Provenance
+    threshold: float
+    columns: List[str]
+    importance: pd.DataFrame = field(default_factory=pd.DataFrame)
+    injection_guard: Any = None
+    vishing_guard: Any = None
+    media_guard: Any = None
+    headline: Dict[str, Any] = field(default_factory=dict)
+    version: int = BUNDLE_VERSION
+
+    def save(self, path: Path) -> Path:
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        # Written to a sibling then renamed. A service watching this path must never observe
+        # a partially written bundle, and rename is atomic within a filesystem.
+        staging = path.with_suffix(path.suffix + ".partial")
+        with staging.open("wb") as handle:
+            pickle.dump(self, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        staging.replace(path)
+        return path
+
+    @classmethod
+    def load(cls, path: Path) -> "ServingBundle":
+        with Path(path).open("rb") as handle:
+            bundle = pickle.load(handle)
+        if not isinstance(bundle, cls):
+            raise TypeError(f"{path} does not contain a serving bundle")
+        if bundle.version != BUNDLE_VERSION:
+            raise ValueError(
+                f"{path} is bundle version {bundle.version}, this build serves "
+                f"{BUNDLE_VERSION}. Re-run the defend stage to rebuild it."
+            )
+        return bundle
+
+    def model_card(self) -> Dict[str, Any]:
+        """The governance view of what is deployed.
+
+        Served as a live endpoint rather than written once into a document, because a model
+        card that describes a different model than the one answering requests is worse than
+        no model card. Generated from the bundle, so it cannot disagree with it.
+        """
+        return {
+            "model": {
+                "name": "redteam-fraud-ensemble",
+                "architecture": "rank-averaged HistGradientBoosting + RandomForest + "
+                                "IsolationForest, isotonic-calibrated on a held-out window",
+                "inputs": len(self.columns),
+                "decision_threshold": round(float(self.threshold), 6),
+                "threshold_basis": "calibrated to a fixed false-positive budget on the "
+                                   "legitimate population of the calibration window",
+            },
+            "provenance": self.provenance.to_dict(),
+            "measured_performance": self.headline,
+            "guards": {
+                "prompt_injection": self.injection_guard is not None,
+                "vishing_transcripts": self.vishing_guard is not None,
+                "media_artefact": self.media_guard is not None,
+                "intent_verification": "deterministic, always active",
+                "agent_identity_and_token_binding": "deterministic, always active",
+            },
+            "intended_use": (
+                "Research and stress-testing of payment fraud detection. This model is "
+                "trained entirely on synthetic data generated by this repository and has "
+                "never seen a real payment. It is not fit for production scoring of real "
+                "customer traffic and no threshold here transfers to a real portfolio."
+            ),
+            "known_limitations": [
+                "Trained and evaluated on synthetic data only; every headline metric is a "
+                "statement about the generator as much as about the model.",
+                "The transcript guard's corpus was written by one author, so its "
+                "near-perfect scores measure internal consistency rather than field "
+                "performance.",
+                "The media artefact layer scores vendor biometric outputs, not media. It is "
+                "not a deepfake detector and will not behave like one.",
+                "Recall is reported at a fixed false-positive budget. A different budget is "
+                "a different model in practice and the operating curve should be consulted "
+                "rather than the headline.",
+            ],
+            "top_features": (self.importance.head(10).to_dict("records")
+                             if not self.importance.empty else []),
+        }
+
+
+def from_artifacts(artifacts, provenance: Provenance) -> ServingBundle:
+    """Package a completed defence run for serving."""
+    return ServingBundle(
+        detector=artifacts.detector,
+        provenance=provenance,
+        threshold=float(artifacts.detector.threshold),
+        columns=list(artifacts.detector.columns),
+        importance=artifacts.importance,
+        injection_guard=artifacts.injection_guard,
+        vishing_guard=getattr(artifacts, "vishing_guard", None),
+        media_guard=getattr(artifacts, "media_guard", None),
+        headline=artifacts.headline.to_dict(),
+    )

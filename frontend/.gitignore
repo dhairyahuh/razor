@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.local
+.vite/
+
+# Copied out of @fontsource by `npm run fonts`. Committed deliberately - a checkout
+# without node_modules has to render correctly, and the brief requires the faces to be
+# self-hosted and accounted for rather than pulled at build time.
+!public/fonts/

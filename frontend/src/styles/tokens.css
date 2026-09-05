@@ -1,0 +1,218 @@
+/* ---------------------------------------------------------------------------
+ * Design tokens.
+ *
+ * Two layers. The first is a raw palette - named colours with no opinion about
+ * where they are used. The second is semantic: every token the application
+ * actually references resolves to a role, not a hue. Themes swap only the
+ * semantic layer, which is why both themes are correct by construction rather
+ * than by remembering to override things.
+ *
+ * The severity scale is deliberately kept out of the accent ramp. In this
+ * product red means attacker or blocked and nothing else; if red were also the
+ * brand colour that meaning would erode the first time someone used it for a
+ * button. Value-at-risk gets its own colour for the same reason - money at
+ * stake is a different axis from severity and reads wrongly when merged into it.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  /* -- raw palette -------------------------------------------------------- */
+
+  /* Ground is a true blue-black. The neutrals above it carry a deliberate blue
+     bias (hue 210) so the greys read as chosen rather than as the default. */
+  --p-ink-1000: #07090c;
+  --p-ink-950: #0b0f13;
+  --p-ink-900: #0f141a;
+  --p-ink-850: #141a22;
+  --p-ink-800: #1a222b;
+  --p-ink-700: #232d38;
+  --p-ink-600: #33404e;
+  --p-ink-500: #4a5b6d;
+  --p-ink-400: #6b7f93;
+  --p-ink-300: #93a5b8;
+  --p-ink-200: #bccbd9;
+  --p-ink-100: #dde6ee;
+  --p-ink-50: #eef3f8;
+  --p-white: #ffffff;
+
+  /* The single structural accent: a cold petrol cyan. Interactive affordances
+     and anything belonging to the blue team. */
+  --p-cyan-600: #0e7490;
+  --p-cyan-500: #0f9bbd;
+  --p-cyan-400: #22bbdd;
+  --p-cyan-300: #67d9f0;
+  --p-cyan-200: #a5e9f8;
+
+  /* Severity. Separate ramp, never used decoratively. */
+  --p-vermilion-600: #b8321a;
+  --p-vermilion-500: #e0451f;
+  --p-vermilion-400: #f26543;
+  --p-vermilion-300: #ff9074;
+  --p-amber-600: #b07708;
+  --p-amber-500: #dc9a10;
+  --p-amber-400: #f0b53c;
+  --p-amber-300: #ffd07a;
+  --p-green-600: #1d7a52;
+  --p-green-500: #26996a;
+  --p-green-400: #3fbb88;
+  --p-green-300: #7fd9b1;
+
+  /* Value at risk. Violet, so money never reads as severity. */
+  --p-violet-500: #7c5cf0;
+  --p-violet-400: #9a80f7;
+  --p-violet-300: #bfb0fb;
+
+  /* -- type --------------------------------------------------------------- */
+
+  --font-display: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Presentation Mode multiplies this one number. Every size below derives
+     from it, so bumping the scale for a projector cannot desynchronise. */
+  --scale: 1;
+
+  --text-2xs: calc(0.6875rem * var(--scale));
+  --text-xs: calc(0.75rem * var(--scale));
+  --text-sm: calc(0.8125rem * var(--scale));
+  --text-base: calc(0.875rem * var(--scale));
+  --text-lg: calc(1rem * var(--scale));
+  --text-xl: calc(1.25rem * var(--scale));
+  --text-2xl: calc(1.625rem * var(--scale));
+  --text-3xl: calc(2.125rem * var(--scale));
+
+  /* -- geometry ----------------------------------------------------------- */
+
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-lg: 6px;
+
+  /* Chart strokes thicken in Presentation Mode; a 1px line vanishes on a
+     projector two rooms deep. */
+  --stroke: 1.5px;
+  --stroke-thin: 1px;
+}
+
+/* -- dark: the default, because a monitoring console is dark ---------------- */
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg-ground: var(--p-ink-950);
+  --bg-surface: var(--p-ink-900);
+  --bg-raised: var(--p-ink-850);
+  --bg-overlay: var(--p-ink-800);
+  --bg-inset: var(--p-ink-1000);
+  --bg-hover: #1b2530;
+  --bg-selected: #1d2c38;
+
+  --border-subtle: var(--p-ink-800);
+  --border: var(--p-ink-700);
+  --border-strong: var(--p-ink-600);
+
+  --fg-primary: var(--p-ink-50);
+  --fg-secondary: var(--p-ink-300);
+  --fg-muted: var(--p-ink-400);
+  --fg-faint: var(--p-ink-500);
+  --fg-inverse: var(--p-ink-950);
+
+  --accent: var(--p-cyan-400);
+  --accent-strong: var(--p-cyan-300);
+  --accent-dim: var(--p-cyan-600);
+  --accent-fg: var(--p-ink-1000);
+  --accent-wash: rgba(34, 187, 221, 0.12);
+
+  --red: var(--p-vermilion-400);
+  --red-strong: var(--p-vermilion-300);
+  --red-dim: var(--p-vermilion-600);
+  --red-wash: rgba(242, 101, 67, 0.13);
+
+  --amber: var(--p-amber-400);
+  --amber-strong: var(--p-amber-300);
+  --amber-dim: var(--p-amber-600);
+  --amber-wash: rgba(240, 181, 60, 0.13);
+
+  --green: var(--p-green-400);
+  --green-strong: var(--p-green-300);
+  --green-dim: var(--p-green-600);
+  --green-wash: rgba(63, 187, 136, 0.12);
+
+  --money: var(--p-violet-400);
+  --money-wash: rgba(154, 128, 247, 0.13);
+
+  --grid: rgba(255, 255, 255, 0.06);
+  --shadow-overlay: 0 24px 64px -12px rgba(0, 0, 0, 0.7);
+  --focus-ring: var(--p-cyan-300);
+  /* Behind the inspector. Deliberately light - the console keeps running behind
+     it and blacking that out would defeat the point of a slide-over. Held as a
+     token rather than as an opacity utility because the semantic colours are
+     plain hex in a custom property, which Tailwind cannot apply alpha to. */
+  --scrim: rgba(7, 9, 12, 0.5);
+}
+
+/* -- light: for a projector that washes darks out, or a printed screenshot -- */
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-ground: #f4f7fa;
+  --bg-surface: var(--p-white);
+  --bg-raised: var(--p-white);
+  --bg-overlay: var(--p-white);
+  --bg-inset: #eaeff5;
+  --bg-hover: #eef3f8;
+  --bg-selected: #e2edf5;
+
+  --border-subtle: #e3eaf1;
+  --border: #cfdae4;
+  --border-strong: #aebecd;
+
+  --fg-primary: var(--p-ink-950);
+  --fg-secondary: var(--p-ink-600);
+  --fg-muted: var(--p-ink-500);
+  --fg-faint: var(--p-ink-400);
+  --fg-inverse: var(--p-white);
+
+  --accent: var(--p-cyan-600);
+  --accent-strong: #0a5f77;
+  --accent-dim: var(--p-cyan-400);
+  --accent-fg: var(--p-white);
+  --accent-wash: rgba(14, 116, 144, 0.1);
+
+  --red: var(--p-vermilion-600);
+  --red-strong: #8f2412;
+  --red-dim: var(--p-vermilion-400);
+  --red-wash: rgba(184, 50, 26, 0.09);
+
+  --amber: #8a5d05;
+  --amber-strong: #6b4804;
+  --amber-dim: var(--p-amber-400);
+  --amber-wash: rgba(176, 119, 8, 0.11);
+
+  --green: var(--p-green-600);
+  --green-strong: #145c3c;
+  --green-dim: var(--p-green-400);
+  --green-wash: rgba(29, 122, 82, 0.1);
+
+  --money: #5a3ad0;
+  --money-wash: rgba(124, 92, 240, 0.1);
+
+  --grid: rgba(11, 15, 19, 0.08);
+  --shadow-overlay: 0 24px 64px -12px rgba(15, 23, 32, 0.22);
+  --focus-ring: var(--p-cyan-600);
+  --scrim: rgba(15, 23, 32, 0.28);
+}
+
+/* Presentation Mode. One class, applied to the root: type up a quarter, strokes
+   thickened, borders raised a step so structure survives projector gamma. */
+[data-presentation='on'] {
+  --scale: 1.25;
+  --stroke: 2.5px;
+  --stroke-thin: 1.5px;
+  --border-subtle: var(--border);
+  --grid: rgba(255, 255, 255, 0.11);
+}
+
+[data-theme='light'][data-presentation='on'] {
+  --grid: rgba(11, 15, 19, 0.14);
+}

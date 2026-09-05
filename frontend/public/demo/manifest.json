@@ -1,0 +1,23 @@
+{
+  "run": "default_run",
+  "baked_from": "the same /api endpoints the live console reads",
+  "endpoints": [
+    "runs.json",
+    "default_run/summary.json",
+    "default_run/identify.json",
+    "default_run/fidelity.json",
+    "default_run/defend.json",
+    "default_run/loop.json",
+    "default_run/report.json",
+    "default_run/transactions.json"
+  ],
+  "transactions": {
+    "rows": 4000,
+    "of_total": 73752,
+    "sampling": "stratified: every decision class and every simulated vector kept"
+  },
+  "transaction_detail": {
+    "payments": 400
+  },
+  "note": "Nothing in this payload was written by hand. Every value is a response the live API produced for this run. Filters the client cannot apply to a sample are disabled in the interface rather than silently ignored."
+}

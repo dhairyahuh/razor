@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>card</title>
+<link rel="stylesheet" href="/src/styles/fonts.css">
+<style>
+  @font-face { font-family:'Archivo'; src:url('/fonts/archivo-latin.woff2') format('woff2'); font-weight:100 900; font-display:block; }
+  @font-face { font-family:'IBM Plex Mono'; src:url('/fonts/plex-mono-500-latin.woff2') format('woff2'); font-weight:500; font-display:block; }
+  @font-face { font-family:'IBM Plex Mono'; src:url('/fonts/plex-mono-600-latin.woff2') format('woff2'); font-weight:600; font-display:block; }
+  @font-face { font-family:'IBM Plex Sans'; src:url('/fonts/plex-sans-400-latin.woff2') format('woff2'); font-weight:400; font-display:block; }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { background:#07090c; }
+
+  .card {
+    width:560px; height:280px; position:relative; overflow:hidden;
+    background:
+      radial-gradient(680px 300px at 84% 22%, rgba(34,187,221,.13), transparent 62%),
+      radial-gradient(460px 260px at 6% 108%, rgba(242,101,67,.10), transparent 60%),
+      #0b0f13;
+    border:1px solid #232d38;
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:22px 24px 18px;
+  }
+  /* Faint grid, the same motif the console uses behind its panels. */
+  .card::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size:28px 28px;
+    mask-image:linear-gradient(105deg, #000 12%, transparent 72%);
+  }
+
+  .eyebrow {
+    font-family:'IBM Plex Mono', monospace; font-weight:600;
+    font-size:9.5px; letter-spacing:.19em; text-transform:uppercase;
+    color:#22bbdd; display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow .bar { width:22px; height:1.5px; background:#22bbdd; }
+
+  h1 {
+    font-family:'Archivo', system-ui, sans-serif; font-weight:700;
+    font-size:32px; line-height:1.06; letter-spacing:-.024em; color:#eef3f8;
+    margin-top:11px; max-width:392px; white-space:nowrap;
+  }
+  h1 .hl { color:#f26543; }
+
+  .sub {
+    margin-top:9px; max-width:372px;
+    font-size:11.5px; line-height:1.42; color:#93a5b8;
+  }
+
+  .stats { display:flex; gap:26px; align-items:flex-end; position:relative; }
+  .stat .n {
+    font-family:'IBM Plex Mono', monospace; font-weight:600;
+    font-size:23px; line-height:1; letter-spacing:-.02em; color:#eef3f8;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat .n.cy { color:#22bbdd; }
+  .stat .n.rd { color:#f26543; }
+  .stat .l {
+    margin-top:5px; font-family:'IBM Plex Mono', monospace; font-weight:500;
+    font-size:8px; letter-spacing:.13em; text-transform:uppercase; color:#6b7f93;
+  }
+  .rule { position:absolute; left:0; right:0; top:-13px; height:1px; background:#232d38; }
+
+  .ring { position:absolute; right:26px; top:50%; transform:translateY(-56%); }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div>
+    <div class="eyebrow"><span class="bar"></span>Razor</div>
+    <h1>Razor<br>GenAI-Era <span class="hl">Payment Fraud</span></h1>
+    <div class="sub">
+      A closed loop: invent the attack, simulate it as real payment traffic,
+      detect it, then attack your own detector and retrain on what got through.
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="rule"></div>
+    <div class="stat"><div class="n cy">67</div><div class="l">Attack vectors</div></div>
+    <div class="stat"><div class="n">2,81,906</div><div class="l">Payments simulated</div></div>
+    <div class="stat"><div class="n">71.6%</div><div class="l">Recall @ 0.5% FP</div></div>
+    <div class="stat"><div class="n rd">12</div><div class="l">Arms-race rounds</div></div>
+  </div>
+
+  <!-- The pillars as a ring, the same argument the console's left rail makes. -->
+  <svg class="ring" width="126" height="126" viewBox="0 0 126 126">
+    <circle cx="63" cy="63" r="45" fill="none" stroke="#232d38" stroke-width="1"/>
+    <path d="M 63 18 A 45 45 0 1 1 24.03 85.5" fill="none" stroke="#22bbdd"
+          stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+    <path d="M 24.03 85.5 A 45 45 0 0 1 61 18.02" fill="none" stroke="#f26543"
+          stroke-width="1.6" stroke-linecap="round" stroke-dasharray="3 3"/>
+    <polygon points="0,-3.4 5.6,0 0,3.4" fill="#f26543" transform="translate(62 18) rotate(88)"/>
+    <!-- Nodes only. At 560px wide a 7px label is illegible, so the four stops are
+         marked and the caption carries the meaning. The one red node is where the
+         loop closes back on itself. -->
+    <circle cx="63" cy="18" r="4" fill="#0b0f13" stroke="#22bbdd" stroke-width="1.4"/>
+    <circle cx="108" cy="63" r="4" fill="#0b0f13" stroke="#22bbdd" stroke-width="1.4"/>
+    <circle cx="63" cy="108" r="4" fill="#0b0f13" stroke="#22bbdd" stroke-width="1.4"/>
+    <circle cx="18" cy="63" r="4.6" fill="#f26543" stroke="#f26543" stroke-width="1.4"/>
+    <text x="63" y="60.5" text-anchor="middle" font-family="IBM Plex Mono, monospace"
+          font-size="9" font-weight="600" letter-spacing=".06em" fill="#6b7f93">CLOSED</text>
+    <text x="63" y="72" text-anchor="middle" font-family="IBM Plex Mono, monospace"
+          font-size="9" font-weight="600" letter-spacing=".06em" fill="#6b7f93">LOOP</text>
+  </svg>
+
+</div>
+</body>
+</html>

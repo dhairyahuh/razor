@@ -1,0 +1,76 @@
+/* ---------------------------------------------------------------------------
+ * Self-hosted faces. No CDN, no external stylesheet, no runtime DNS lookup:
+ * the app has to render correctly with the network cable pulled, and a font
+ * request to a third party is the one thing that silently breaks that.
+ *
+ * Files are copied out of the @fontsource packages by `npm run fonts` and are
+ * committed, so a checkout without node_modules still renders.
+ *
+ * font-display: swap everywhere. A dashboard that shows nothing for 400ms
+ * while a face loads reads as broken; one that reflows once does not.
+ * ------------------------------------------------------------------------- */
+
+/* Display - Archivo. A grotesque with enough character to carry headings and
+   the small uppercase labels this interface leans on. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/archivo-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Body - IBM Plex Sans. A humanist workhorse, and specifically not Inter. */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/plex-sans-400-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/plex-sans-500-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/plex-sans-600-latin.woff2') format('woff2');
+}
+
+/* Numbers, ids, reason codes and column names - IBM Plex Mono. In this domain
+   an id and a reason code *are* the vocabulary; setting them in mono is not
+   decoration, it is saying what they are. */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/plex-mono-400-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/plex-mono-500-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/plex-mono-600-latin.woff2') format('woff2');
+}

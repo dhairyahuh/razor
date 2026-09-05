@@ -1,0 +1,42 @@
+# Fast smoke configuration: the complete three-pillar pipeline in a few minutes on a
+# laptop. Use for development and demos. Metrics are noisier than the default config
+# because rare vectors get only a handful of episodes, so quote numbers from a default
+# run, not from this one.
+seed: 7
+run_name: quick
+
+population:
+  n_customers: 1500
+  n_merchants: 400
+  n_psps: 10
+
+benign:
+  start_date: "2026-05-01"
+  n_days: 21
+  base_txns_per_customer_per_day: 1.1
+  hard_negative_rate: 0.055
+
+attacks:
+  target_fraud_rate: 0.010
+  signal_emission: 0.72
+  evasion_share: 0.18
+  mix: {}
+
+defence:
+  test_days: 6
+  calibration_days: 4
+  max_iter: 200
+  forest_n_estimators: 150
+  target_fpr: 0.005
+  zero_day_vectors: 4
+
+loop:
+  rounds: 2
+  population: 5
+  screen_multiplier: 2
+  oracle_probe_budget: 1500
+  survivors: 2
+  # A 21-day run gives each vector a handful of episodes, so the floor drops to keep the
+  # loop exercisable. Fitness here is noisy by construction; use the default config for
+  # numbers worth quoting.
+  min_fraud_rows: 6

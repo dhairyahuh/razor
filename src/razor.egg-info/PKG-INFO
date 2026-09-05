@@ -1,3 +1,54 @@
+Metadata-Version: 2.4
+Name: razor
+Version: 0.1.0
+Summary: A closed-loop red team / blue team system for GenAI-era payment fraud
+License: MIT License
+        
+        Copyright (c) 2026 the Payment Red Teaming AI contributors
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Repository, https://github.com/dhairyahuh/Razor
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Security
+Classifier: Intended Audience :: Financial and Insurance Industry
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy==2.0.2
+Requires-Dist: pandas==2.3.3
+Requires-Dist: scipy==1.13.1
+Requires-Dist: scikit-learn==1.6.1
+Requires-Dist: networkx==3.2.1
+Requires-Dist: pyarrow==21.0.0
+Requires-Dist: PyYAML==6.0.3
+Requires-Dist: cryptography==43.0.3
+Provides-Extra: dev
+Requires-Dist: pytest==8.4.2; extra == "dev"
+Requires-Dist: httpx==0.28.1; extra == "dev"
+Provides-Extra: serve
+Requires-Dist: fastapi==0.128.8; extra == "serve"
+Requires-Dist: uvicorn[standard]==0.39.0; extra == "serve"
+Requires-Dist: pydantic==2.13.4; extra == "serve"
+Dynamic: license-file
+
 <div align="center">
 
 # Razor
@@ -6,7 +57,7 @@
 
 <br/>
 
-**[▶ Open the live console](https://razor-jet.vercel.app)** · no install, no backend, works offline once loaded
+**[▶ Open the live console](https://razor.vercel.app)** · no install, no backend, works offline once loaded
 
 <br/>
 
@@ -78,7 +129,7 @@ The three core artifacts, and where each one is.
 |:--:|---|---|---|
 | **1** | **Code repository** | **[github.com/dhairyahuh/Razor](https://github.com/dhairyahuh/Razor)** | All three pillars plus the loop and the console. Organised, documented, reproducible from a config and a seed. |
 | **2** | **Solution walkthrough** | [`docs/Solution-Walkthrough.docx`](docs/Solution-Walkthrough.docx) | Seven sections covering the attacks identified, how they are generated, the detection model with efficacy results, and real-world feasibility. |
-| **3** | **Working prototype** | **[razor-jet.vercel.app](https://razor-jet.vercel.app)** — nothing to install | Seven-route operator console, deployed as a static site over the committed run. Also runs locally against the live API with `docker compose up` → <http://127.0.0.1:5173>. |
+| **3** | **Working prototype** | **[razor.vercel.app](https://razor.vercel.app)** — nothing to install | Seven-route operator console, deployed as a static site over the committed run. Also runs locally against the live API with `docker compose up` → <http://127.0.0.1:5173>. |
 
 > [!NOTE]
 > **The walkthrough is generated, not typed.** [`docs/walkthrough/build.mjs`](docs/walkthrough/build.mjs) parses the run's own CSVs and emits the `.docx`, so no figure in it can drift from the evidence. Rebuild it with:
@@ -93,7 +144,7 @@ The three core artifacts, and where each one is.
 
 ### Deployed Console
 
-**<https://razor-jet.vercel.app>**
+**<https://razor.vercel.app>**
 
 The console over the committed run, as a static site. Every chart, table, drill-down and the
 guided tour work, and keep working with the network disconnected once the page has loaded.

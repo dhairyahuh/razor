@@ -26,7 +26,8 @@ import type { Discovered, DiscoveredVector } from '@/types/api'
  * description they belong to.
  */
 export function WriteBack({ discovered }: { discovered: Discovered | undefined }) {
-  const vectors = discovered?.vectors ?? []
+  const rawVectors = discovered?.vectors
+  const vectors = useMemo(() => rawVectors ?? [], [rawVectors])
 
   const parents = useMemo(
     () => new Set(vectors.map((v) => v.discovered_by?.parent_vector).filter(Boolean)),

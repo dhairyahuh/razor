@@ -364,7 +364,7 @@ children.push(
     [
       ['**Code repository', 'GitHub — all three pillars, organised, documented, reproducible'],
       ['**Solution walkthrough', 'This document'],
-      ['**Working prototype', 'Live at https://Razor.vercel.app — nothing to install. Also runs locally against the API with `docker compose up`.'],
+      ['**Working prototype', 'Live at https://razor.vercel.app — nothing to install. Also runs locally against the API with `docker compose up`.'],
       ['**Run these figures come from', `${demo.summary?.run_name ?? 'demo'} · seed ${demo.summary?.seed ?? 7} · run id ${demo.summary?.provenance?.run_id ?? '—'}`],
     ],
   ),
@@ -944,7 +944,7 @@ children.push(
   table(
     [{ h: 'Goal', w: 40 }, { h: 'Command', w: 60 }],
     [
-      ['**The prototype, nothing installed', 'https://Razor.vercel.app'],
+      ['**The prototype, nothing installed', 'https://razor.vercel.app'],
       ['**Console + API locally, no toolchain', 'docker compose up'],
       ['**The quick profile end to end (~3 min)', 'PYTHONPATH=src python -m redteam run --quick'],
       ['**The full profile (~25–30 min)', 'PYTHONPATH=src python -m redteam run'],

@@ -7,3 +7,4 @@ dist/
 # without node_modules has to render correctly, and the brief requires the faces to be
 # self-hosted and accounted for rather than pulled at build time.
 !public/fonts/
+.vercel

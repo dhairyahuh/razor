@@ -28,6 +28,7 @@ export function Argument() {
   const summary = useSummary()
   const defend = useDefend()
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const s = (summary.data?.summary ?? {}) as Record<string, any>
   const identify = s.identify ?? {}
   const generate = s.generate ?? {}

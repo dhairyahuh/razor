@@ -32,3 +32,4 @@ artifacts/
 # tables above already say everything they support.
 artifacts/demo/defend_scored_test_set.csv
 artifacts/serving/
+.vercel

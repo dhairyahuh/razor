@@ -16,10 +16,6 @@ classifiers = [
     "Intended Audience :: Financial and Insurance Industry",
 ]
 
-[project.urls]
-Repository = "https://github.com/dhairyahuh/Razor"
-
-
 # Kept in step with requirements.txt, which carries the reasoning behind the pins.
 dependencies = [
     "numpy==2.0.2",
@@ -46,3 +42,10 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 redteam = ["identify/attack_library.yaml"]
+
+[tool.vercel]
+entrypoint = "src.redteam.serve.api:app"
+
+[project.urls]
+Repository = "https://github.com/dhairyahuh/Razor"
+

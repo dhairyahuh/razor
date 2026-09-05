@@ -48,7 +48,7 @@ serve yesterday's numbers.
 
 ## Deploying it as a static site
 
-**Deployed at <https://Razor.vercel.app>.**
+**Deployed at <https://razor-jet.vercel.app>.**
 
 Demo Mode is the whole application with no backend, so the console deploys anywhere that
 serves files. [`vercel.json`](vercel.json) configures Vercel; the same three decisions apply

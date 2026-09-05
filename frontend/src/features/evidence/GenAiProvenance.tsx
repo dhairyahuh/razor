@@ -67,6 +67,7 @@ const COMPONENTS: Component[] = [
 
 export function GenAiProvenance() {
   const { data } = useSummary()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const generate = ((data?.summary ?? {}) as Record<string, any>).generate ?? {}
 
   // The judge is the one component whose absence the run records directly, so it

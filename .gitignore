@@ -33,3 +33,15 @@ artifacts/
 artifacts/demo/defend_scored_test_set.csv
 artifacts/serving/
 .vercel
+
+# Media, pitch video, audio, and temporary scratch artifacts
+*.mp4
+*.aiff
+*.mp3
+*.wav
+*.avi
+*.mov
+*.webm
+scratch/
+video_builder/
+
